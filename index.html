@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crate Unbox Simulator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #1e1e2f;
+      color: white;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    .crate-buttons {
+      margin: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 12px 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #3c3c5c;
+      color: white;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #565682;
+    }
+    #result-box {
+      margin-top: 30px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    #claim-btn {
+      display: none;
+      margin-top: 15px;
+      background: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <h1>Crate Unbox Simulator</h1>
+  <div class="crate-buttons">
+    <button onclick="openCrate('standard')">Standard Crate</button>
+    <button onclick="openCrate('megarock')">Megarock Crate</button>
+    <button onclick="openCrate('bob')">Bob Crate</button>
+    <button onclick="openCrate('barzil')">Barzil Crate</button>
+    <button onclick="openCrate('overkill')">Overkill Crate</button>
+  </div>
+
+  <div id="result-box">Press a crate to unbox!</div>
+  <button id="claim-btn" onclick="claimItem()">Claim</button>
+
+  <script>
+    let currentItem = null;
+
+    function openCrate(crate) {
+      if (crate === "standard") {
+        currentItem = unboxStandard();
+        document.getElementById("result-box").innerText = "You unboxed: " + currentItem;
+        document.getElementById("claim-btn").style.display = "inline-block";
+      } else {
+        document.getElementById("result-box").innerText = "Crate not yet implemented!";
+        document.getElementById("claim-btn").style.display = "none";
+      }
+    }
+
+    function claimItem() {
+      document.getElementById("result-box").innerText = "You claimed: " + currentItem;
+      document.getElementById("claim-btn").style.display = "none";
+    }
+
+    function unboxStandard() {
+      // Chances
+      const roll = Math.random() * 100;
+
+      if (roll < 79) {
+        // Uncommon pool
+        const uncommons = ["slime", "water", "leaves", "ink", "forcefield", "explosion", "cartoony water", "butterflies", "blue explosion", "birds"];
+        return uncommons[Math.floor(Math.random() * uncommons.length)];
+      } else if (roll < 97) { // 79 + 18
+        const rares = ["pixilated lightning", "plasma blast", "painted", "fireworks"];
+        return rares[Math.floor(Math.random() * rares.length)];
+      } else if (roll < 99.5) { // 97 + 2.5
+        const epics = ["psychic", "poisonous"];
+        return epics[Math.floor(Math.random() * epics.length)];
+      } else {
+        return "lightning (LEGENDARY)";
+      }
+    }
+  </script>
+</body>
+</html>
