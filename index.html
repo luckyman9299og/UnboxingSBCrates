@@ -55,109 +55,37 @@
 
     const crates = {
       standard: {
-        uncommons: {
-          chance: 79,
-          items: ["slime", "water", "leaves", "ink", "forcefield", "explosion", "cartoony water", "butterflies", "blue explosion", "birds"],
-          color: "🟢"
-        },
-        rares: {
-          chance: 18,
-          items: ["pixilated lightning", "plasma blast", "painted", "fireworks"],
-          color: "🔵"
-        },
-        epics: {
-          chance: 2.5,
-          items: ["psychic", "poisonous"],
-          color: "🟣"
-        },
-        legendary: {
-          chance: 0.5,
-          items: ["lightning"],
-          color: "🟡"
-        }
+        uncommons: { chance: 79, items: ["slime", "water", "leaves", "ink", "forcefield", "explosion", "cartoony water", "butterflies", "blue explosion", "birds"], color: "🟢" },
+        rares: { chance: 18, items: ["pixilated lightning", "plasma blast", "painted", "fireworks"], color: "🔵" },
+        epics: { chance: 2.5, items: ["psychic", "poisonous"], color: "🟣" },
+        legendary: { chance: 0.5, items: ["lightning"], color: "🟡" }
       },
       megarock: {
-        uncommons: {
-          chance: 70,
-          items: ["Stop", "Rocks", "Noob", "Moyai", "Lucky", "Fish", "Duckie", "Blossom"],
-          color: "🟢"
-        },
-        rares: {
-          chance: 26,
-          items: ["Robux", "Pixelated explosion", "Music", "Gold", "Glitched"],
-          color: "🔵"
-        },
-        epics: {
-          chance: 3.3,
-          items: ["Windy", "Rgb", "Smoked"],
-          color: "🟣"
-        },
-        legendary: {
-          chance: 0.6,
-          items: ["Glass", "Slashes"],
-          color: "🟡"
-        },
-        mythic: {
-          chance: 0.1,
-          items: ["Energized"],
-          color: "🔴"
-        }
+        uncommons: { chance: 70, items: ["Stop", "Rocks", "Noob", "Moyai", "Lucky", "Fish", "Duckie", "Blossom"], color: "🟢" },
+        rares: { chance: 26, items: ["Robux", "Pixelated explosion", "Music", "Gold", "Glitched"], color: "🔵" },
+        epics: { chance: 3.3, items: ["Windy", "Rgb", "Smoked"], color: "🟣" },
+        legendary: { chance: 0.6, items: ["Glass", "Slashes"], color: "🟡" },
+        mythic: { chance: 0.1, items: ["Energized"], color: "🔴" }
       },
       bob: {
-        uncommons: {
-          chance: 60,
-          items: ["Snow", "Retro", "Heart", "Sandy", "Evil", "Bread", "Binary"],
-          color: "🟢"
-        },
-        rares: {
-          chance: 34,
-          items: ["Light", "Pixel Pubbles", "Rays", "Eye", "Iceshards"],
-          color: "🔵"
-        },
-        epics: {
-          chance: 5,
-          items: ["Phoenix", "Fractal", "Cursed", "Gravity"],
-          color: "🟣"
-        },
-        legendary: {
-          chance: 0.85,
-          items: ["Darkness", "Holy"],
-          color: "🟡"
-        },
-        mythic: {
-          chance: 0.15,
-          items: ["Portal"],
-          color: "🔴"
-        }
+        uncommons: { chance: 60, items: ["Snow", "Retro", "Heart", "Sandy", "Evil", "Bread", "Binary"], color: "🟢" },
+        rares: { chance: 34, items: ["Light", "Pixel Pubbles", "Rays", "Eye", "Iceshards"], color: "🔵" },
+        epics: { chance: 5, items: ["Phoenix", "Fractal", "Cursed", "Gravity"], color: "🟣" },
+        legendary: { chance: 0.85, items: ["Darkness", "Holy"], color: "🟡" },
+        mythic: { chance: 0.15, items: ["Portal"], color: "🔴" }
       },
       barzil: {
-        uncommons: {
-          chance: 60,
-          items: ["Erupting Bricks", "Job Application", "Pob's Light Snack", "Snoob Migration", "Falling Boulder", "Basketball Explosion", "Angry Cat", "Evil Cat", "Curious Cat", "Hello Cat"],
-          color: "🟢"
-        },
-        rares: {
-          chance: 34,
-          items: ["Pondering Orb", "Clocktower Crash", "Oog's Damnation", "Portal Mist"],
-          color: "🔵"
-        },
-        epics: {
-          chance: 5,
-          items: ["Mortis #1 Fan", "Duel of the Ages", "Minefield"],
-          color: "🟣"
-        },
-        legendary: {
-          chance: 0.85,
-          items: ["Pablo's Clownery", "Crunchy Explosion"],
-          color: "🟡"
-        },
-        mythic: {
-          chance: 0.15,
-          items: ["Barzilian Nexus"],
-          color: "🔴"
-        }
+        uncommons: { chance: 60, items: ["Erupting Bricks", "Job Application", "Pob's Light Snack", "Snoob Migration", "Falling Boulder", "Basketball Explosion", "Angry Cat", "Evil Cat", "Curious Cat", "Hello Cat"], color: "🟢" },
+        rares: { chance: 34, items: ["Pondering Orb", "Clocktower Crash", "Oog's Damnation", "Portal Mist"], color: "🔵" },
+        epics: { chance: 5, items: ["Mortis #1 Fan", "Duel of the Ages", "Minefield"], color: "🟣" },
+        legendary: { chance: 0.85, items: ["Pablo's Clownery", "Crunchy Explosion"], color: "🟡" },
+        mythic: { chance: 0.15, items: ["Barzilian Nexus"], color: "🔴" }
       },
-      overkill: {}
+      overkill: {
+        epics: { chance: 80, items: ["Vibrant Supernova", "Sand Tornado", "Rainbomb", "Chilling Fog", "Aquatic Gateway"], color: "🟣" },
+        legendary: { chance: 18.5, items: ["Toxic Puddle", "Purple Rapture", "Popstar Spectacle"], color: "🟡" },
+        mythic: { chance: 1.5, items: ["Hellfire Sigil"], color: "🔴" }
+      }
     };
 
     function selectCrate(crate) {
@@ -172,27 +100,19 @@
 
       if (crateData.uncommons) {
         cumulative += crateData.uncommons.chance;
-        if (roll <= cumulative) {
-          return { item: randomChoice(crateData.uncommons.items), rarity: crateData.uncommons.color };
-        }
+        if (roll <= cumulative) return { item: randomChoice(crateData.uncommons.items), rarity: crateData.uncommons.color };
       }
       if (crateData.rares) {
         cumulative += crateData.rares.chance;
-        if (roll <= cumulative) {
-          return { item: randomChoice(crateData.rares.items), rarity: crateData.rares.color };
-        }
+        if (roll <= cumulative) return { item: randomChoice(crateData.rares.items), rarity: crateData.rares.color };
       }
       if (crateData.epics) {
         cumulative += crateData.epics.chance;
-        if (roll <= cumulative) {
-          return { item: randomChoice(crateData.epics.items), rarity: crateData.epics.color };
-        }
+        if (roll <= cumulative) return { item: randomChoice(crateData.epics.items), rarity: crateData.epics.color };
       }
       if (crateData.legendary) {
         cumulative += crateData.legendary.chance;
-        if (roll <= cumulative) {
-          return { item: randomChoice(crateData.legendary.items), rarity: crateData.legendary.color };
-        }
+        if (roll <= cumulative) return { item: randomChoice(crateData.legendary.items), rarity: crateData.legendary.color };
       }
       if (crateData.mythic) {
         return { item: randomChoice(crateData.mythic.items), rarity: crateData.mythic.color };
@@ -208,7 +128,7 @@
     function unbox() {
       if (!currentCrate) return;
       const crateData = crates[currentCrate];
-      if (!crateData.uncommons) {
+      if (!crateData.epics && !crateData.uncommons) {
         document.getElementById("result").innerHTML = "This crate isn't ready yet!";
         return;
       }
