@@ -10,9 +10,13 @@
       text-align: center;
       background: #111;
       color: white;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 0.5s ease-in-out;
     }
     h1 {
       margin: 20px;
+      text-shadow: 2px 2px 4px #000;
     }
     .crate-buttons button, #unboxBtn {
       margin: 10px;
@@ -30,6 +34,7 @@
       margin-top: 20px;
       font-size: 22px;
       font-weight: bold;
+      text-shadow: 2px 2px 4px #000;
     }
   </style>
 </head>
@@ -55,12 +60,14 @@
 
     const crates = {
       standard: {
+        bg: "https://static.wikia.nocookie.net/roblox-slap-battles/images/1/1b/Standard.png/revision/latest/scale-to-width-down/1000?cb=20250207023547",
         uncommons: { chance: 79, items: ["slime", "water", "leaves", "ink", "forcefield", "explosion", "cartoony water", "butterflies", "blue explosion", "birds"], color: "🟢" },
         rares: { chance: 18, items: ["pixilated lightning", "plasma blast", "painted", "fireworks"], color: "🔵" },
         epics: { chance: 2.5, items: ["psychic", "poisonous"], color: "🟣" },
         legendary: { chance: 0.5, items: ["lightning"], color: "🟡" }
       },
       megarock: {
+        bg: "https://static.wikia.nocookie.net/roblox-slap-battles/images/c/ce/BETTER_MEGAROCK_CRATE_IMAGE.png/revision/latest?cb=20241228175323",
         uncommons: { chance: 70, items: ["Stop", "Rocks", "Noob", "Moyai", "Lucky", "Fish", "Duckie", "Blossom"], color: "🟢" },
         rares: { chance: 26, items: ["Robux", "Pixelated explosion", "Music", "Gold", "Glitched"], color: "🔵" },
         epics: { chance: 3.3, items: ["Windy", "Rgb", "Smoked"], color: "🟣" },
@@ -68,6 +75,7 @@
         mythic: { chance: 0.1, items: ["Energized"], color: "🔴" }
       },
       bob: {
+        bg: "https://static.wikia.nocookie.net/roblox-slap-battles/images/e/e9/My_bob_crate_image_is_better_than_the_old_one.png/revision/latest?cb=20241228175201",
         uncommons: { chance: 60, items: ["Snow", "Retro", "Heart", "Sandy", "Evil", "Bread", "Binary"], color: "🟢" },
         rares: { chance: 34, items: ["Light", "Pixel Pubbles", "Rays", "Eye", "Iceshards"], color: "🔵" },
         epics: { chance: 5, items: ["Phoenix", "Fractal", "Cursed", "Gravity"], color: "🟣" },
@@ -75,6 +83,7 @@
         mythic: { chance: 0.15, items: ["Portal"], color: "🔴" }
       },
       barzil: {
+        bg: "https://static.wikia.nocookie.net/roblox-slap-battles/images/9/9d/Barzil_Crate.png/revision/latest/scale-to-width-down/1000?cb=20250707013259",
         uncommons: { chance: 60, items: ["Erupting Bricks", "Job Application", "Pob's Light Snack", "Snoob Migration", "Falling Boulder", "Basketball Explosion", "Angry Cat", "Evil Cat", "Curious Cat", "Hello Cat"], color: "🟢" },
         rares: { chance: 34, items: ["Pondering Orb", "Clocktower Crash", "Oog's Damnation", "Portal Mist"], color: "🔵" },
         epics: { chance: 5, items: ["Mortis #1 Fan", "Duel of the Ages", "Minefield"], color: "🟣" },
@@ -82,6 +91,7 @@
         mythic: { chance: 0.15, items: ["Barzilian Nexus"], color: "🔴" }
       },
       overkill: {
+        bg: "https://static.wikia.nocookie.net/roblox-slap-battles/images/d/de/OVERKILLCrate.png/revision/latest/scale-to-width-down/1000?cb=20250328213353",
         epics: { chance: 80, items: ["Vibrant Supernova", "Sand Tornado", "Rainbomb", "Chilling Fog", "Aquatic Gateway"], color: "🟣" },
         legendary: { chance: 18.5, items: ["Toxic Puddle", "Purple Rapture", "Popstar Spectacle"], color: "🟡" },
         mythic: { chance: 1.5, items: ["Hellfire Sigil"], color: "🔴" }
@@ -90,6 +100,7 @@
 
     function selectCrate(crate) {
       currentCrate = crate;
+      document.body.style.backgroundImage = `url('${crates[crate].bg}')`;
       document.getElementById("unboxBtn").disabled = false;
       document.getElementById("result").innerHTML = `Selected <b>${crate} crate</b>. Press Unbox!`;
     }
