@@ -130,7 +130,33 @@
           color: "🔴"
         }
       },
-      barzil: {},
+      barzil: {
+        uncommons: {
+          chance: 60,
+          items: ["Erupting Bricks", "Job Application", "Pob's Light Snack", "Snoob Migration", "Falling Boulder", "Basketball Explosion", "Angry Cat", "Evil Cat", "Curious Cat", "Hello Cat"],
+          color: "🟢"
+        },
+        rares: {
+          chance: 34,
+          items: ["Pondering Orb", "Clocktower Crash", "Oog's Damnation", "Portal Mist"],
+          color: "🔵"
+        },
+        epics: {
+          chance: 5,
+          items: ["Mortis #1 Fan", "Duel of the Ages", "Minefield"],
+          color: "🟣"
+        },
+        legendary: {
+          chance: 0.85,
+          items: ["Pablo's Clownery", "Crunchy Explosion"],
+          color: "🟡"
+        },
+        mythic: {
+          chance: 0.15,
+          items: ["Barzilian Nexus"],
+          color: "🔴"
+        }
+      },
       overkill: {}
     };
 
@@ -144,56 +170,32 @@
       let roll = Math.random() * 100;
       let cumulative = 0;
 
-      // Uncommons
       if (crateData.uncommons) {
         cumulative += crateData.uncommons.chance;
         if (roll <= cumulative) {
-          return {
-            item: randomChoice(crateData.uncommons.items),
-            rarity: crateData.uncommons.color
-          };
+          return { item: randomChoice(crateData.uncommons.items), rarity: crateData.uncommons.color };
         }
       }
-
-      // Rares
       if (crateData.rares) {
         cumulative += crateData.rares.chance;
         if (roll <= cumulative) {
-          return {
-            item: randomChoice(crateData.rares.items),
-            rarity: crateData.rares.color
-          };
+          return { item: randomChoice(crateData.rares.items), rarity: crateData.rares.color };
         }
       }
-
-      // Epics
       if (crateData.epics) {
         cumulative += crateData.epics.chance;
         if (roll <= cumulative) {
-          return {
-            item: randomChoice(crateData.epics.items),
-            rarity: crateData.epics.color
-          };
+          return { item: randomChoice(crateData.epics.items), rarity: crateData.epics.color };
         }
       }
-
-      // Legendary
       if (crateData.legendary) {
         cumulative += crateData.legendary.chance;
         if (roll <= cumulative) {
-          return {
-            item: randomChoice(crateData.legendary.items),
-            rarity: crateData.legendary.color
-          };
+          return { item: randomChoice(crateData.legendary.items), rarity: crateData.legendary.color };
         }
       }
-
-      // Mythic
       if (crateData.mythic) {
-        return {
-          item: randomChoice(crateData.mythic.items),
-          rarity: crateData.mythic.color
-        };
+        return { item: randomChoice(crateData.mythic.items), rarity: crateData.mythic.color };
       }
 
       return { item: "Unknown", rarity: "" };
