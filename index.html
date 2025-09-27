@@ -2,116 +2,154 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Crate Unboxing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crate Unbox Simulator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #1a1a1a;
-      color: #fff;
       text-align: center;
-      padding: 20px;
+      background: #111;
+      color: white;
     }
     h1 {
-      margin-bottom: 20px;
+      margin: 20px;
     }
-    .crate-buttons button {
+    .crate-buttons button, #unboxBtn, #rerollBtn {
       margin: 10px;
-      padding: 15px 25px;
-      font-size: 16px;
+      padding: 12px 20px;
       border: none;
       border-radius: 8px;
+      font-size: 16px;
       cursor: pointer;
-      background: #333;
-      color: #fff;
       transition: 0.2s;
     }
-    .crate-buttons button:hover {
-      background: #555;
+    .crate-buttons button:hover, #unboxBtn:hover, #rerollBtn:hover {
+      transform: scale(1.05);
     }
     #result {
-      margin-top: 25px;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .rarity {
-      display: inline-block;
-      margin-top: 15px;
+      margin-top: 20px;
       font-size: 22px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>Crate Unboxing Simulator</h1>
+  <h1>Crate Unbox Simulator</h1>
+
   <div class="crate-buttons">
-    <button onclick="openCrate('standard')">Standard Crate</button>
-    <button onclick="openCrate('megarock')">Megarock Crate</button>
-    <button onclick="openCrate('bob')">Bob Crate</button>
-    <button onclick="openCrate('barzil')">Barzil Crate</button>
-    <button onclick="openCrate('overkill')">Overkill Crate</button>
+    <button onclick="selectCrate('standard')">Standard Crate</button>
+    <button onclick="selectCrate('megarock')">Megarock Crate</button>
+    <button onclick="selectCrate('bob')">Bob Crate</button>
+    <button onclick="selectCrate('barzil')">Barzil Crate</button>
+    <button onclick="selectCrate('overkill')">Overkill Crate</button>
+  </div>
+
+  <div>
+    <button id="unboxBtn" onclick="unbox()" disabled>Unbox</button>
+    <button id="rerollBtn" onclick="reroll()" disabled>Reroll</button>
   </div>
 
   <div id="result"></div>
-  <div id="claim-area"></div>
 
   <script>
-    const lootTables = {
+    let currentCrate = null;
+    let lastItem = null;
+
+    const crates = {
       standard: {
-        uncommon: {
+        uncommons: {
           chance: 79,
-          items: ["Slime", "Water", "Leaves", "Ink", "Forcefield", "Explosion", "Cartoony Water", "Butterflies", "Blue Explosion", "Birds"]
+          items: ["slime", "water", "leaves", "ink", "forcefield", "explosion", "cartoony water", "butterflies", "blue explosion", "birds"],
+          color: "🟢"
         },
-        rare: {
+        rares: {
           chance: 18,
-          items: ["Pixilated Lightning", "Plasma Blast", "Painted", "Fireworks"]
+          items: ["pixilated lightning", "plasma blast", "painted", "fireworks"],
+          color: "🔵"
         },
-        epic: {
+        epics: {
           chance: 2.5,
-          items: ["Psychic", "Poisonous"]
+          items: ["psychic", "poisonous"],
+          color: "🟣"
         },
         legendary: {
           chance: 0.5,
-          items: ["Lightning"]
+          items: ["lightning"],
+          color: "🟡"
         }
-      }
+      },
+      megarock: {}, // TODO: add loot table
+      bob: {},      // TODO: add loot table
+      barzil: {},   // TODO: add loot table
+      overkill: {}  // TODO: add loot table
     };
 
-    function openCrate(type) {
-      if (type !== "standard") {
-        document.getElementById("result").innerHTML = "⚠️ This crate isn't set up yet!";
-        document.getElementById("claim-area").innerHTML = "";
+    function selectCrate(crate) {
+      currentCrate = crate;
+      document.getElementById("unboxBtn").disabled = false;
+      document.getElementById("rerollBtn").disabled = true;
+      document.getElementById("result").innerHTML = `Selected <b>${crate} crate</b>. Press Unbox!`;
+    }
+
+    function getRandomItem(crateData) {
+      let roll = Math.random() * 100;
+      let cumulative = 0;
+
+      // Uncommons
+      cumulative += crateData.uncommons.chance;
+      if (roll <= cumulative) {
+        return {
+          item: randomChoice(crateData.uncommons.items),
+          rarity: crateData.uncommons.color
+        };
+      }
+
+      // Rares
+      cumulative += crateData.rares.chance;
+      if (roll <= cumulative) {
+        return {
+          item: randomChoice(crateData.rares.items),
+          rarity: crateData.rares.color
+        };
+      }
+
+      // Epics
+      cumulative += crateData.epics.chance;
+      if (roll <= cumulative) {
+        return {
+          item: randomChoice(crateData.epics.items),
+          rarity: crateData.epics.color
+        };
+      }
+
+      // Legendary
+      return {
+        item: randomChoice(crateData.legendary.items),
+        rarity: crateData.legendary.color
+      };
+    }
+
+    function randomChoice(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function unbox() {
+      if (!currentCrate) return;
+      const crateData = crates[currentCrate];
+      if (!crateData.uncommons) {
+        document.getElementById("result").innerHTML = "This crate isn't ready yet!";
         return;
       }
-
-      let roll = Math.random() * 100;
-      let rarity = "";
-      let item = "";
-
-      const crate = lootTables.standard;
-      if (roll < crate.uncommon.chance) {
-        rarity = "Uncommon 🟢";
-        item = randomPick(crate.uncommon.items);
-      } else if (roll < crate.uncommon.chance + crate.rare.chance) {
-        rarity = "Rare 🔵";
-        item = randomPick(crate.rare.items);
-      } else if (roll < crate.uncommon.chance + crate.rare.chance + crate.epic.chance) {
-        rarity = "Epic 🟣";
-        item = randomPick(crate.epic.items);
-      } else {
-        rarity = "Legendary 🟡";
-        item = randomPick(crate.legendary.items);
-      }
-
-      document.getElementById("result").innerHTML = `🎉 You unboxed: <br> <span class="rarity">${item} (${rarity})</span>`;
-      document.getElementById("claim-area").innerHTML = `<button onclick="claimItem()">Claim</button>`;
+      lastItem = getRandomItem(crateData);
+      document.getElementById("result").innerHTML = `You unboxed: ${lastItem.rarity} <b>${lastItem.item}</b>`;
+      document.getElementById("rerollBtn").disabled = false;
     }
 
-    function claimItem() {
-      document.getElementById("result").innerHTML = "✅ Item claimed!";
-      document.getElementById("claim-area").innerHTML = "";
-    }
-
-    function randomPick(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
+    function reroll() {
+      if (!currentCrate || !lastItem) return;
+      const crateData = crates[currentCrate];
+      lastItem = getRandomItem(crateData);
+      document.getElementById("result").innerHTML = `You rerolled and got: ${lastItem.rarity} <b>${lastItem.item}</b>`;
     }
   </script>
 </body>
