@@ -71,19 +71,21 @@
     /* Confetti styles */
     .confetti {
       position: fixed;
-      top: 0;
+      bottom: 0;
       width: 0;
       height: 0;
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
       border-bottom: 10px solid;
       opacity: 0.9;
-      animation: fall 2s linear forwards;
+      animation: pop-fall 3s ease-out forwards;
     }
 
-    @keyframes fall {
-      0% { transform: translateY(0) rotate(0); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    @keyframes pop-fall {
+      0%   { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+      20%  { transform: translateY(-150px) scale(1.2) rotate(90deg); }
+      50%  { transform: translateY(-250px) scale(1) rotate(180deg); }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
     }
   </style>
 </head>
@@ -118,7 +120,8 @@
 
   <script>
     let currentCrate = null;
-    let rollCounter = 0; // counts rolls per selected crate
+    let legendRolls = 0; 
+    let mythicRolls = 0; 
 
     const crates = {
       standard: {
@@ -157,7 +160,8 @@
 
     function selectCrate(crate) {
       currentCrate = crate;
-      rollCounter = 0; // reset roll counter for this crate
+      legendRolls = 0;
+      mythicRolls = 0;
       document.getElementById("unboxBtn").disabled = false;
       document.getElementById("result").innerHTML = `Selected <b>${crate} crate</b>. Press Unbox!`;
     }
@@ -196,47 +200,42 @@
     function unbox() {
       if (!currentCrate) return;
       const crateData = crates[currentCrate];
-      if (!crateData.epics && !crateData.uncommons) {
-        document.getElementById("result").innerHTML = "This crate isn't ready yet!";
-        return;
-      }
-
-      rollCounter++; // increment roll count for this crate
-      const result = getRandomItem(crateData);
-
       const btn = document.getElementById("unboxBtn");
 
-      if (result.type === "legendary") {
-        document.getElementById("result").innerHTML = `You rolled a legendary: ${result.rarity} <b>${result.item}</b> after ${rollCounter} rolls!`;
-        rollCounter = 0; // reset ONLY on legendary
-      } else if (result.type === "mythic") {
-        document.getElementById("result").innerHTML = `You rolled a mythic: ${result.rarity} <b>${result.item}</b> after ${rollCounter} rolls!`;
-        rollCounter = 0; // reset ONLY on mythic
+      legendRolls++;
+      mythicRolls++;
+      const result = getRandomItem(crateData);
 
-        // disable button for 5 seconds
+      if (result.type === "legendary") {
+        document.getElementById("result").innerHTML = `You rolled a legendary: ${result.rarity} <b>${result.item}</b> after ${legendRolls} legend rolls!`;
+        legendRolls = 0; 
+        btn.disabled = true;
+        setTimeout(() => { btn.disabled = false; }, 2500);
+      } 
+      else if (result.type === "mythic") {
+        document.getElementById("result").innerHTML = `You rolled a mythic: ${result.rarity} <b>${result.item}</b> after ${mythicRolls} mythic rolls!`;
+        mythicRolls = 0; 
+
         btn.disabled = true;
         setTimeout(() => { btn.disabled = false; }, 5000);
 
-        // play sound
         document.getElementById("mythicSound").play();
-
-        // launch confetti
         launchConfetti();
-      } else {
+      } 
+      else {
         document.getElementById("result").innerHTML = `You unboxed: ${result.rarity} <b>${result.item}</b>`;
       }
     }
 
     function launchConfetti() {
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 40; i++) {
         const confetti = document.createElement("div");
         confetti.className = "confetti";
         confetti.style.left = Math.random() * 100 + "vw";
         confetti.style.borderBottomColor = getRandomColor();
-        confetti.style.animationDuration = (Math.random() * 1 + 1.5) + "s";
+        confetti.style.animationDuration = (Math.random() * 1.5 + 2) + "s";
         document.body.appendChild(confetti);
-
-        setTimeout(() => confetti.remove(), 2000);
+        setTimeout(() => confetti.remove(), 3000);
       }
     }
 
