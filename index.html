@@ -52,8 +52,13 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    #unboxBtn:hover {
+    #unboxBtn:hover:enabled {
       transform: scale(1.05);
+    }
+    #unboxBtn:disabled {
+      background: #444;
+      color: #aaa;
+      cursor: not-allowed;
     }
     #result {
       margin-top: 20px;
@@ -91,6 +96,7 @@
 
   <script>
     let currentCrate = null;
+    let rollCounter = 0; // counts rolls per selected crate
 
     const crates = {
       standard: {
@@ -129,6 +135,7 @@
 
     function selectCrate(crate) {
       currentCrate = crate;
+      rollCounter = 0; // reset roll counter for this crate
       document.getElementById("unboxBtn").disabled = false;
       document.getElementById("result").innerHTML = `Selected <b>${crate} crate</b>. Press Unbox!`;
     }
@@ -139,25 +146,25 @@
 
       if (crateData.uncommons) {
         cumulative += crateData.uncommons.chance;
-        if (roll <= cumulative) return { item: randomChoice(crateData.uncommons.items), rarity: crateData.uncommons.color };
+        if (roll <= cumulative) return { item: randomChoice(crateData.uncommons.items), rarity: crateData.uncommons.color, type: "uncommon" };
       }
       if (crateData.rares) {
         cumulative += crateData.rares.chance;
-        if (roll <= cumulative) return { item: randomChoice(crateData.rares.items), rarity: crateData.rares.color };
+        if (roll <= cumulative) return { item: randomChoice(crateData.rares.items), rarity: crateData.rares.color, type: "rare" };
       }
       if (crateData.epics) {
         cumulative += crateData.epics.chance;
-        if (roll <= cumulative) return { item: randomChoice(crateData.epics.items), rarity: crateData.epics.color };
+        if (roll <= cumulative) return { item: randomChoice(crateData.epics.items), rarity: crateData.epics.color, type: "epic" };
       }
       if (crateData.legendary) {
         cumulative += crateData.legendary.chance;
-        if (roll <= cumulative) return { item: randomChoice(crateData.legendary.items), rarity: crateData.legendary.color };
+        if (roll <= cumulative) return { item: randomChoice(crateData.legendary.items), rarity: crateData.legendary.color, type: "legendary" };
       }
       if (crateData.mythic) {
-        return { item: randomChoice(crateData.mythic.items), rarity: crateData.mythic.color };
+        return { item: randomChoice(crateData.mythic.items), rarity: crateData.mythic.color, type: "mythic" };
       }
 
-      return { item: "Unknown", rarity: "" };
+      return { item: "Unknown", rarity: "", type: "none" };
     }
 
     function randomChoice(arr) {
@@ -171,8 +178,21 @@
         document.getElementById("result").innerHTML = "This crate isn't ready yet!";
         return;
       }
+
+      rollCounter++; // increment roll count for this crate
       const result = getRandomItem(crateData);
-      document.getElementById("result").innerHTML = `You unboxed: ${result.rarity} <b>${result.item}</b>`;
+
+      if (result.type === "mythic") {
+        document.getElementById("result").innerHTML = `🎉 You rolled a mythic: ${result.rarity} <b>${result.item}</b> after ${rollCounter} rolls! 🎉`;
+        const btn = document.getElementById("unboxBtn");
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.disabled = false;
+          document.getElementById("result").innerHTML += "<br><i>You can now unbox again!</i>";
+        }, 5000);
+      } else {
+        document.getElementById("result").innerHTML = `You unboxed: ${result.rarity} <b>${result.item}</b>`;
+      }
     }
   </script>
 </body>
