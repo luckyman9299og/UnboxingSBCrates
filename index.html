@@ -205,14 +205,14 @@
         document.getElementById("result").innerHTML = `You rolled a legendary: ${result.rarity} <b>${result.item}</b> after ${legendRolls} rolls!`;
         legendRolls = 0;
         btn.disabled = true;
-        setTimeout(() => { btn.disabled = false; }, 2500);
+        setTimeout(() => { btn.disabled = false; }, 300); // 0.3s cooldown
       }
       else if (result.type === "mythic") {
         document.getElementById("result").innerHTML = `You rolled a mythic: ${result.rarity} <b>${result.item}</b> after ${mythicRolls} rolls!`;
         mythicRolls = 0;
 
         btn.disabled = true;
-        setTimeout(() => { btn.disabled = false; }, 5000);
+        setTimeout(() => { btn.disabled = false; }, 5000); // 5s cooldown
 
         document.getElementById("mythicSound").play();
         launchConfetti();
