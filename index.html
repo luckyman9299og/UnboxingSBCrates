@@ -14,7 +14,7 @@
     h1 {
       margin: 20px;
     }
-    .crate-buttons button, #unboxBtn, #rerollBtn {
+    .crate-buttons button, #unboxBtn {
       margin: 10px;
       padding: 12px 20px;
       border: none;
@@ -23,7 +23,7 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .crate-buttons button:hover, #unboxBtn:hover, #rerollBtn:hover {
+    .crate-buttons button:hover, #unboxBtn:hover {
       transform: scale(1.05);
     }
     #result {
@@ -46,14 +46,12 @@
 
   <div>
     <button id="unboxBtn" onclick="unbox()" disabled>Unbox</button>
-    <button id="rerollBtn" onclick="reroll()" disabled>Reroll</button>
   </div>
 
   <div id="result"></div>
 
   <script>
     let currentCrate = null;
-    let lastItem = null;
 
     const crates = {
       standard: {
@@ -78,16 +76,41 @@
           color: "🟡"
         }
       },
-      megarock: {}, // TODO: add loot table
-      bob: {},      // TODO: add loot table
-      barzil: {},   // TODO: add loot table
-      overkill: {}  // TODO: add loot table
+      megarock: {
+        uncommons: {
+          chance: 70,
+          items: ["Stop", "Rocks", "Noob", "Moyai", "Lucky", "Fish", "Duckie", "Blossom"],
+          color: "🟢"
+        },
+        rares: {
+          chance: 26,
+          items: ["Robux", "Pixelated explosion", "Music", "Gold", "Glitched"],
+          color: "🔵"
+        },
+        epics: {
+          chance: 3.3,
+          items: ["Windy", "Rgb", "Smoked"],
+          color: "🟣"
+        },
+        legendary: {
+          chance: 0.6,
+          items: ["Glass", "Slashes"],
+          color: "🟡"
+        },
+        mythic: {
+          chance: 0.1,
+          items: ["Energized"],
+          color: "🔴"
+        }
+      },
+      bob: {},     
+      barzil: {},   
+      overkill: {}  
     };
 
     function selectCrate(crate) {
       currentCrate = crate;
       document.getElementById("unboxBtn").disabled = false;
-      document.getElementById("rerollBtn").disabled = true;
       document.getElementById("result").innerHTML = `Selected <b>${crate} crate</b>. Press Unbox!`;
     }
 
@@ -96,37 +119,58 @@
       let cumulative = 0;
 
       // Uncommons
-      cumulative += crateData.uncommons.chance;
-      if (roll <= cumulative) {
-        return {
-          item: randomChoice(crateData.uncommons.items),
-          rarity: crateData.uncommons.color
-        };
+      if (crateData.uncommons) {
+        cumulative += crateData.uncommons.chance;
+        if (roll <= cumulative) {
+          return {
+            item: randomChoice(crateData.uncommons.items),
+            rarity: crateData.uncommons.color
+          };
+        }
       }
 
       // Rares
-      cumulative += crateData.rares.chance;
-      if (roll <= cumulative) {
-        return {
-          item: randomChoice(crateData.rares.items),
-          rarity: crateData.rares.color
-        };
+      if (crateData.rares) {
+        cumulative += crateData.rares.chance;
+        if (roll <= cumulative) {
+          return {
+            item: randomChoice(crateData.rares.items),
+            rarity: crateData.rares.color
+          };
+        }
       }
 
       // Epics
-      cumulative += crateData.epics.chance;
-      if (roll <= cumulative) {
-        return {
-          item: randomChoice(crateData.epics.items),
-          rarity: crateData.epics.color
-        };
+      if (crateData.epics) {
+        cumulative += crateData.epics.chance;
+        if (roll <= cumulative) {
+          return {
+            item: randomChoice(crateData.epics.items),
+            rarity: crateData.epics.color
+          };
+        }
       }
 
       // Legendary
-      return {
-        item: randomChoice(crateData.legendary.items),
-        rarity: crateData.legendary.color
-      };
+      if (crateData.legendary) {
+        cumulative += crateData.legendary.chance;
+        if (roll <= cumulative) {
+          return {
+            item: randomChoice(crateData.legendary.items),
+            rarity: crateData.legendary.color
+          };
+        }
+      }
+
+      // Mythic
+      if (crateData.mythic) {
+        return {
+          item: randomChoice(crateData.mythic.items),
+          rarity: crateData.mythic.color
+        };
+      }
+
+      return { item: "Unknown", rarity: "" };
     }
 
     function randomChoice(arr) {
@@ -140,16 +184,8 @@
         document.getElementById("result").innerHTML = "This crate isn't ready yet!";
         return;
       }
-      lastItem = getRandomItem(crateData);
-      document.getElementById("result").innerHTML = `You unboxed: ${lastItem.rarity} <b>${lastItem.item}</b>`;
-      document.getElementById("rerollBtn").disabled = false;
-    }
-
-    function reroll() {
-      if (!currentCrate || !lastItem) return;
-      const crateData = crates[currentCrate];
-      lastItem = getRandomItem(crateData);
-      document.getElementById("result").innerHTML = `You rerolled and got: ${lastItem.rarity} <b>${lastItem.item}</b>`;
+      const result = getRandomItem(crateData);
+      document.getElementById("result").innerHTML = `You unboxed: ${result.rarity} <b>${result.item}</b>`;
     }
   </script>
 </body>
