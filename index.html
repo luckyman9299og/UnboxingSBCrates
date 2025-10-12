@@ -13,9 +13,7 @@
       overflow-x: hidden;
       overflow-y: hidden;
     }
-    h1 {
-      margin: 20px;
-    }
+    h1 { margin: 20px; }
     .crate-buttons {
       display: flex;
       justify-content: center;
@@ -54,9 +52,7 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    #unboxBtn:hover:enabled, #multiUnboxBtn:hover:enabled {
-      transform: scale(1.05);
-    }
+    #unboxBtn:hover:enabled, #multiUnboxBtn:hover:enabled { transform: scale(1.05); }
     #unboxBtn:disabled, #multiUnboxBtn:disabled {
       background: #444;
       color: #aaa;
@@ -126,21 +122,12 @@
   <h1>Crate Unbox Simulator</h1>
 
   <div class="crate-buttons">
-    <button onclick="selectCrate('standard')">
-      <img src="standardcrate.png" alt="Standard Crate"> Standard Crate
-    </button>
-    <button onclick="selectCrate('megarock')">
-      <img src="megarockcrate.png" alt="Megarock Crate"> Megarock Crate
-    </button>
-    <button onclick="selectCrate('bob')">
-      <img src="bobcrate.png" alt="Bob Crate"> Bob Crate
-    </button>
-    <button onclick="selectCrate('barzil')">
-      <img src="barzilcrate.png" alt="Barzil Crate"> Barzil Crate
-    </button>
-    <button onclick="selectCrate('overkill')">
-      <img src="overkillcrate.png" alt="Overkill Crate"> Overkill Crate
-    </button>
+    <button onclick="selectCrate('standard')"><img src="standardcrate.png">Standard Crate</button>
+    <button onclick="selectCrate('megarock')"><img src="megarockcrate.png">Megarock Crate</button>
+    <button onclick="selectCrate('bob')"><img src="bobcrate.png">Bob Crate</button>
+    <button onclick="selectCrate('barzil')"><img src="barzilcrate.png">Barzil Crate</button>
+    <button onclick="selectCrate('overkill')"><img src="overkillcrate.png">Overkill Crate</button>
+    <button onclick="selectCrate('jack')"><img src="jackscrate.png">Jack’s Crate</button>
   </div>
 
   <div>
@@ -203,6 +190,13 @@
         epics: { chance: 80, items: ["Vibrant Supernova","Sand Tornado","Rainbomb","Chilling Fog","Aquatic Gateway"], color: "🟣" },
         legendary: { chance: 18.5, items: ["Toxic Puddle","Purple Rapture","Popstar Spectacle"], color: "🟡" },
         mythic: { chance: 1.5, items: ["Hellfire Sigil"], color: "🔴" }
+      },
+      jack: {
+        uncommons: { chance: 60, items: ["Troll Requiem","Runes","Realistic Eye","Lava Skulls","Fall Leaves","Cauldron Bubble"], color: "🟢" },
+        rares: { chance: 34, items: ["Witch's Spell","Shadow Bite","Run","Crows"], color: "🔵" },
+        epics: { chance: 5, items: ["Crimson Splash","Batty","Abyss"], color: "🟣" },
+        legendary: { chance: 0.85, items: ["Eerie Fog","Jack 'O Lantern"], color: "🟡" },
+        mythic: { chance: 0.15, items: ["Damned"], color: "🔴" }
       }
     };
 
@@ -242,13 +236,10 @@
       return { item: "Unknown", rarity: "", type: "none" };
     }
 
-    function randomChoice(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
-    }
+    function randomChoice(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
     function unbox() {
       if (!currentCrate || cooldownActive) return;
-
       legendaryCounter++;
       mythicCounter++;
       const result = getRandomItem(crates[currentCrate]);
@@ -311,9 +302,7 @@
       document.getElementById("popupOverlay").style.display = "flex";
     }
 
-    function closePopup() {
-      document.getElementById("popupOverlay").style.display = "none";
-    }
+    function closePopup() { document.getElementById("popupOverlay").style.display = "none"; }
 
     function launchConfetti() {
       const shapes = ["rect", "triangle"];
