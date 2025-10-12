@@ -128,6 +128,7 @@
     <button onclick="selectCrate('barzil')"><img src="barzilcrate.png">Barzil Crate</button>
     <button onclick="selectCrate('overkill')"><img src="overkillcrate.png">Overkill Crate</button>
     <button onclick="selectCrate('jack')"><img src="jackscrate.png">Jack’s Crate</button>
+    <button onclick="selectCrate('guides')"><img src="guidescrate.png">Guide’s Crate</button>
   </div>
 
   <div>
@@ -148,7 +149,9 @@
     </div>
   </div>
 
+  <!-- Sounds -->
   <audio id="mythicSound" src="mythic.mp3"></audio>
+  <audio id="reludeSound" src="relude.mp3"></audio>
 
   <script>
     let currentCrate = null;
@@ -197,6 +200,13 @@
         epics: { chance: 5, items: ["Crimson Splash","Batty","Abyss"], color: "🟣" },
         legendary: { chance: 0.85, items: ["Eerie Fog","Jack 'O Lantern"], color: "🟡" },
         mythic: { chance: 0.15, items: ["Damned"], color: "🔴" }
+      },
+      guides: {
+        uncommons: { chance: 60, items: ["Smart Cat","Mini Crit","Garbage","Dumb Cat"], color: "🟢" },
+        rares: { chance: 34, items: ["Pixel Sparkles","Chip"], color: "🔵" },
+        epics: { chance: 5, items: ["Divergent"], color: "🟣" },
+        legendary: { chance: 0.85, items: ["Hitman"], color: "🟡" },
+        mythic: { chance: 0.15, items: ["Relude"], color: "🔴" }
       }
     };
 
@@ -252,7 +262,11 @@
         document.getElementById("result").innerHTML = `You rolled a mythic after ${mythicCounter} rolls: ${result.rarity} <b>${result.item}</b>`;
         mythicCounter = 0;
         triggerCooldown(5000);
-        document.getElementById("mythicSound").play();
+        if (currentCrate === "guides") {
+          document.getElementById("reludeSound").play();
+        } else {
+          document.getElementById("mythicSound").play();
+        }
         launchConfetti();
       } else {
         document.getElementById("result").innerHTML = `You unboxed: ${result.rarity} <b>${result.item}</b>`;
@@ -274,8 +288,6 @@
 
       let results = [];
       for (let i = 0; i < amount; i++) {
-        legendaryCounter++;
-        mythicCounter++;
         results.push(getRandomItem(crates[currentCrate]));
       }
 
