@@ -52,7 +52,9 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    #unboxBtn:hover:enabled, #multiUnboxBtn:hover:enabled { transform: scale(1.05); }
+    #unboxBtn:hover:enabled, #multiUnboxBtn:hover:enabled {
+      transform: scale(1.05);
+    }
     #unboxBtn:disabled, #multiUnboxBtn:disabled {
       background: #444;
       color: #aaa;
@@ -82,15 +84,16 @@
       animation: pop-fall 3s ease-out forwards;
     }
     @keyframes pop-fall {
-      0%   { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
-      20%  { transform: translateY(-150px) scale(1.2) rotate(90deg); }
-      50%  { transform: translateY(-250px) scale(1) rotate(180deg); }
+      0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+      20% { transform: translateY(-150px) scale(1.2) rotate(90deg); }
+      50% { transform: translateY(-250px) scale(1) rotate(180deg); }
       100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
     }
     #popupOverlay {
       display: none;
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: rgba(0,0,0,0.8);
       justify-content: center;
       align-items: center;
@@ -129,6 +132,7 @@
     <button onclick="selectCrate('overkill')"><img src="overkillcrate.png">Overkill Crate</button>
     <button onclick="selectCrate('jack')"><img src="jackscrate.png">Jack’s Crate</button>
     <button onclick="selectCrate('guides')"><img src="guidescrate.png">Guide’s Crate</button>
+    <button onclick="selectCrate('alchemist')"><img src="alchemistcrate.png">Alchemist Crate</button>
   </div>
 
   <div>
@@ -140,7 +144,6 @@
 
   <div id="result"></div>
 
-  <!-- Popup -->
   <div id="popupOverlay">
     <div id="popupBox">
       <button id="closePopup" onclick="closePopup()">Close</button>
@@ -149,11 +152,16 @@
     </div>
   </div>
 
-  <!-- Sounds -->
   <audio id="mythicSound" src="mythic.mp3"></audio>
   <audio id="reludeSound" src="relude.mp3"></audio>
 
   <script>
+    // make functions global
+    window.selectCrate = selectCrate;
+    window.unbox = unbox;
+    window.multiUnbox = multiUnbox;
+    window.closePopup = closePopup;
+
     let currentCrate = null;
     let cooldownActive = false;
     let legendaryCounter = 0;
@@ -207,6 +215,13 @@
         epics: { chance: 5, items: ["Divergent"], color: "🟣" },
         legendary: { chance: 0.85, items: ["Hitman"], color: "🟡" },
         mythic: { chance: 0.15, items: ["Relude"], color: "🔴" }
+      },
+      alchemist: {
+        uncommons: { chance: 60, items: ["Tome Burst","Mushroom Outburst","Floating Candles","Electric Field","Black Feather Burst"], color: "🟢" },
+        rares: { chance: 34, items: ["Stabbing Daggers","Moon Beams","Croaking Contamination","Crimson Uproar"], color: "🔵" },
+        epics: { chance: 5, items: ["Glooming Runes","Cosmic Glitter","Conjuring Ink"], color: "🟣" },
+        legendary: { chance: 0.85, items: ["Virulent Congregation","Demonic Hex"], color: "🟡" },
+        mythic: { chance: 0.15, items: ["Pandecrownium"], color: "🔴" }
       }
     };
 
@@ -246,7 +261,9 @@
       return { item: "Unknown", rarity: "", type: "none" };
     }
 
-    function randomChoice(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function randomChoice(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
 
     function unbox() {
       if (!currentCrate || cooldownActive) return;
@@ -255,11 +272,13 @@
       const result = getRandomItem(crates[currentCrate]);
 
       if (result.type === "legendary") {
-        document.getElementById("result").innerHTML = `You rolled a legendary after ${legendaryCounter} rolls: ${result.rarity} <b>${result.item}</b>`;
+        document.getElementById("result").innerHTML =
+          `You rolled a legendary after ${legendaryCounter} rolls: ${result.rarity} <b>${result.item}</b>`;
         legendaryCounter = 0;
         triggerCooldown(500);
       } else if (result.type === "mythic") {
-        document.getElementById("result").innerHTML = `You rolled a mythic after ${mythicCounter} rolls: ${result.rarity} <b>${result.item}</b>`;
+        document.getElementById("result").innerHTML =
+          `You rolled a mythic after ${mythicCounter} rolls: ${result.rarity} <b>${result.item}</b>`;
         mythicCounter = 0;
         triggerCooldown(5000);
         if (currentCrate === "guides") {
@@ -314,36 +333,21 @@
       document.getElementById("popupOverlay").style.display = "flex";
     }
 
-    function closePopup() { document.getElementById("popupOverlay").style.display = "none"; }
+    function closePopup() {
+      document.getElementById("popupOverlay").style.display = "none";
+    }
 
     function launchConfetti() {
-      const shapes = ["rect", "triangle"];
       for (let i = 0; i < 40; i++) {
         const confetti = document.createElement("div");
-        confetti.className = "confetti";
-        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        confetti.classList.add("confetti");
         confetti.style.left = Math.random() * 100 + "vw";
-        confetti.style.background = getRandomColor();
-        confetti.style.width = (Math.random() * 12 + 8) + "px";
-        confetti.style.height = (Math.random() * 20 + 10) + "px";
-        if (shape === "triangle") {
-          confetti.style.width = 0;
-          confetti.style.height = 0;
-          confetti.style.borderLeft = "8px solid transparent";
-          confetti.style.borderRight = "8px solid transparent";
-          confetti.style.borderBottom = "14px solid " + getRandomColor();
-          confetti.style.background = "transparent";
-        }
-        confetti.style.animationDuration = (Math.random() * 1.5 + 2) + "s";
+        confetti.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        confetti.style.width = Math.random() * 10 + 5 + "px";
+        confetti.style.height = Math.random() * 10 + 5 + "px";
         document.body.appendChild(confetti);
         setTimeout(() => confetti.remove(), 3000);
       }
     }
-
-    function getRandomColor() {
-      const colors = ["#ff0","#0f0","#0ff","#f0f","#f00","#00f","#ffa500","#39ff14"];
-      return colors[Math.floor(Math.random() * colors.length)];
-    }
   </script>
-</body>
-</html>
+</body
